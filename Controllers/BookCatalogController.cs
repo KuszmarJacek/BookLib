@@ -1,5 +1,4 @@
-﻿using BookLib.Config;
-using BookLib.DTOs;
+﻿using BookLib.DTOs;
 using BookLib.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

@@ -1,5 +1,5 @@
 ﻿
-using BookLib.Config;
+using BookLib;
 using Microsoft.Data.Sqlite;
 using System.Text.Json.Serialization;
 
