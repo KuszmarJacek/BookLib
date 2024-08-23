@@ -8,4 +8,4 @@ Currently supports CRUD for books, controller for API, swagger for API documenta
 - [x] Refactor db operations on Book entity as a repository
 - [ ] Add review repository
 - [ ] Add integration test
-- [ ] Add some sort of authentication for users
+- [ ] Add authentication for users and cleanup things that should not be visible
