@@ -4,7 +4,7 @@
 ## Get latest from `dotnet new gitignore`
 
 # sqlite db file
-*.db
+booklib.db*
 
 # dotenv files
 .env
