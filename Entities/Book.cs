@@ -13,8 +13,8 @@ namespace BookLib.Entities
         public int Id { get; set; }
         public required string Title { get; set; }
         public string? Description { get; set; }
-        public List<BookRating>? Ratings { get; } = [];
-        public List<Tag> Tags { get; } = [];
-        public List<Author> Authors { get; } = [];
+        public List<BookRating>? Ratings { get; set; } = [];
+        public List<Tag> Tags { get; set; } = [];
+        public List<Author> Authors { get; set; } = [];
     }
 }

@@ -1,12 +1,18 @@
-﻿
-using BookLib;
-using BookLib.Data;
+﻿using BookLib.Data;
 using BookLib.Services;
 using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<BookCatalogContext>();
+var config = builder.Configuration;
+
+builder.Services.AddDbContext<RepositoryContext>(options =>
+{
+    var sqliteConnStr = config.GetConnectionString("sqlite-conn-string");
+    options.UseSqlite(sqliteConnStr);
+});
+
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddTransient<IBookService, BookService>();
 
@@ -20,11 +26,11 @@ app.MapControllers();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-using var keepAliveConnection = new SqliteConnection(BookCatalogContext.ConnectionString);
+using var keepAliveConnection = new SqliteConnection(config.GetConnectionString("sqlite-conn-string"));
 keepAliveConnection.Open();
 
-BookCatalogContext.PopulateDb();
-await BookCatalogContext.WriteBookEntityToConsole("Pan Tadeusz");
+//RepositoryContext.PopulateDb();
+//await RepositoryContext.WriteBookEntityToConsole("Pan Tadeusz");
 
 app.Run();
 

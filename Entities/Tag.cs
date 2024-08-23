@@ -10,6 +10,6 @@ namespace BookLib.Entities
     {
         public int Id { get; set; }
         public required string Name { get; set; }
-        public List<Book> Books { get; } = [];
+        public List<Book> Books { get; set; } = [];
     }
 }

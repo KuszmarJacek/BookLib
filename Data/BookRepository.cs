@@ -8,9 +8,9 @@ namespace BookLib.Data
 {
     public class BookRepository : IBookRepository
     {
-        private readonly BookCatalogContext _dbContext;
+        private readonly RepositoryContext _dbContext;
 
-        public BookRepository(BookCatalogContext dbContext)
+        public BookRepository(RepositoryContext dbContext)
         {
             _dbContext = dbContext;
         }
