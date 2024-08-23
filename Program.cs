@@ -1,4 +1,5 @@
 ﻿using BookLib.Data;
+using BookLib.Extensions;
 using BookLib.Services;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -16,11 +17,18 @@ builder.Services.AddDbContext<RepositoryContext>(options =>
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddTransient<IBookService, BookService>();
 
+builder.Services.AddAuthentication();
+builder.Services.ConfigureIdentity();
+
 builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
 
 app.UseSwagger();
@@ -28,9 +36,6 @@ app.UseSwaggerUI();
 
 using var keepAliveConnection = new SqliteConnection(config.GetConnectionString("sqlite-conn-string"));
 keepAliveConnection.Open();
-
-//RepositoryContext.PopulateDb();
-//await RepositoryContext.WriteBookEntityToConsole("Pan Tadeusz");
 
 app.Run();
 

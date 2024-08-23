@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BookLib.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class AddedRolesToDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -268,6 +268,15 @@ namespace BookLib.Migrations
                         principalTable: "Tag",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "1310b733-fde7-4155-8c6f-3d9f2007d730", null, "Manager", "MANAGER" },
+                    { "2b42351c-e2b3-4655-b167-7b08819a3b2e", null, "Administrator", "ADMINISTRATOR" }
                 });
 
             migrationBuilder.InsertData(

@@ -1,4 +1,5 @@
-﻿using BookLib.Entities;
+﻿using BookLib.Data.Configuration;
+using BookLib.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -22,6 +23,7 @@ namespace BookLib.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.ApplyConfiguration(new RoleConfiguration());
             new DbInitializer(builder).Seed();
         }
     }
