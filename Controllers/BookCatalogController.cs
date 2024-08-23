@@ -1,5 +1,6 @@
 ﻿using BookLib.DTOs;
 using BookLib.Entities;
+using BookLib.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,37 +10,24 @@ namespace BookLib.Controllers
     [Route("[controller]")]
     public class BookCatalogController : ControllerBase
     {
-        private readonly BookCatalogContext _dbContext;
-
-        public BookCatalogController(BookCatalogContext dbContext)
+        private readonly IBookService _bookService;
+        
+        public BookCatalogController(IBookService bookService)
         {
-            _dbContext = dbContext;
+            _bookService = bookService;
         }
 
         // IAsyncEnumerable ensures that each incoming book is accessible as it's getting fetched from the db. Task<IEnumerabl> would fetch all the books and then present them.
         [HttpGet]
         public IAsyncEnumerable<Book> GetBooks()
         {
-            // AsNoTracking to prevent reading values that are overwritten at the moment
-            IQueryable<Book> query = _dbContext.Books
-                .Include(book => book.Ratings)
-                .Include(book => book.Authors)
-                .Include(book => book.Tags)
-                .AsNoTracking();
-            return query.AsAsyncEnumerable();        
+            return _bookService.GetBooks();
         }
 
         [HttpGet("{title}")]
-        public async Task<ActionResult<Book>> GetBook(string title)
+        public async Task<ActionResult<Book>> GetBookAsync(string title)
         {
-            IQueryable<Book> query = _dbContext.Books
-                .Where(book => book.Title.ToLower()
-                .Equals(title.ToLower()))
-                .Include(book => book.Ratings)
-                .Include(book => book.Authors)
-                .Include(book => book.Tags)
-                .AsNoTracking();
-            var book = await query.FirstOrDefaultAsync();
+            var book = await _bookService.GetBookAsyncOrDefault(title);
 
             if (book == null)
             {
@@ -50,44 +38,33 @@ namespace BookLib.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Book>> CreateBook(BookCreationDTO bookCreationDTO, CancellationToken cancellationToken)
+        public async Task<ActionResult<Book>> CreateBookAsync(BookCreationDTO bookCreationDTO, CancellationToken cancellationToken)
         {
-            var book = new Book { Title = bookCreationDTO.Title, Description = bookCreationDTO.Description };
-            var entityEntry = _dbContext.Books.Add(book);
-            await _dbContext.SaveChangesAsync(cancellationToken);
-            return Ok(entityEntry.Entity);
+            var book = await _bookService.CreateBookAsync(bookCreationDTO, cancellationToken);
+            return Ok(book);
         }
 
         [HttpPatch("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> UpdateBook(int id, BookUpdateDTO bookUpdateDTO, CancellationToken cancellationToken)
+        public async Task<ActionResult> UpdateBookAsync(int id, BookUpdateDTO bookUpdateDTO, CancellationToken cancellationToken)
         {
-            var book = await _dbContext.FindAsync<Book>([id], cancellationToken);
-            if (book == null) { return NotFound(); }
-            if (bookUpdateDTO.Title != null)
+            var book = await _bookService.UpdateBookAsyncOrDefault(id, bookUpdateDTO, cancellationToken);
+            if (book == null)
             {
-                book.Title = bookUpdateDTO.Title;
+                return NotFound();
             }
-            if (bookUpdateDTO.Description != null)
-            {
-                book.Description = bookUpdateDTO.Description;
-            }
-
-            await _dbContext.SaveChangesAsync(cancellationToken);
             return Ok(book);
         }
 
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> DeleteBook(int id, CancellationToken cancellationToken)
+        public async Task<ActionResult> DeleteBookAsync(int id, CancellationToken cancellationToken)
         {
             // cascading delete because ratings should not exist for non existing books
-            var book = await _dbContext.Books.Include(book => book.Ratings).FirstOrDefaultAsync(book => book.Id == id, cancellationToken);
+            var book = await _bookService.DeleteBookAsyncOrDefault(id, cancellationToken);
             if (book == null) { return NotFound(); };
-            _dbContext.Remove(book);
-            await _dbContext.SaveChangesAsync(cancellationToken);
             return NoContent();
         }
     }
