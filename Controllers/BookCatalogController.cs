@@ -2,7 +2,6 @@
 using BookLib.Entities;
 using BookLib.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BookLib.Controllers
 {
