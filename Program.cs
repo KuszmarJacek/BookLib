@@ -27,6 +27,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddAuthentication();
 builder.Services.ConfigureIdentity();
+builder.Services.ConfigureJWT(builder.Configuration);
 
 builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 builder.Services.AddSwaggerGen();
@@ -44,6 +45,7 @@ app.UseSwaggerUI();
 
 using var keepAliveConnection = new SqliteConnection(config.GetConnectionString("sqlite-conn-string"));
 keepAliveConnection.Open();
+
 
 app.Run();
 

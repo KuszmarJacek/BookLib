@@ -1,6 +1,7 @@
 ﻿using BookLib.DTOs;
 using BookLib.Entities;
 using BookLib.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookLib.Controllers
@@ -18,6 +19,7 @@ namespace BookLib.Controllers
 
         // IAsyncEnumerable ensures that each incoming book is accessible as it's getting fetched from the db. Task<IEnumerabl> would fetch all the books and then present them.
         [HttpGet]
+        [Authorize]
         public IAsyncEnumerable<Book> GetBooks()
         {
             return _bookService.GetBooks();
