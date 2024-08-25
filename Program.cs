@@ -39,8 +39,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-//app.UseSwagger();
-//app.UseSwaggerUI();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 using var keepAliveConnection = new SqliteConnection(config.GetConnectionString("sqlite-conn-string"));
 keepAliveConnection.Open();

@@ -17,7 +17,7 @@ namespace BookLib.Controllers
         }
 
         [HttpPost]
-        //[ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrationDTO userForRegistrationDTO)
         {
             var result = await _service.AuthenticationService.RegisterUser(userForRegistrationDTO);
