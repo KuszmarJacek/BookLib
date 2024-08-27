@@ -1,16 +1,17 @@
-﻿using BookLib.DTOs;
+﻿using BookLib.Data;
+using BookLib.DTOs;
 using BookLib.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace BookLib.Data
+namespace BookLib.Domain.Repositories
 {
     public class BookRepository : IBookRepository
     {
-        private readonly BookCatalogContext _dbContext;
+        private readonly RepositoryContext _dbContext;
 
-        public BookRepository(BookCatalogContext dbContext)
+        public BookRepository(RepositoryContext dbContext)
         {
             _dbContext = dbContext;
         }

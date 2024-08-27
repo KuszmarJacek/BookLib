@@ -1,8 +1,8 @@
 ﻿using BookLib.DTOs;
 using BookLib.Entities;
 using BookLib.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BookLib.Controllers
 {
@@ -38,6 +38,7 @@ namespace BookLib.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         public async Task<ActionResult<Book>> CreateBookAsync(BookCreationDTO bookCreationDTO, CancellationToken cancellationToken)
         {
             var book = await _bookService.CreateBookAsync(bookCreationDTO, cancellationToken);
@@ -47,6 +48,7 @@ namespace BookLib.Controllers
         [HttpPatch("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Roles = "Manager")]
         public async Task<ActionResult> UpdateBookAsync(int id, BookUpdateDTO bookUpdateDTO, CancellationToken cancellationToken)
         {
             var book = await _bookService.UpdateBookAsyncOrDefault(id, bookUpdateDTO, cancellationToken);
@@ -60,6 +62,7 @@ namespace BookLib.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [Authorize(Roles = "Manager")]
         public async Task<ActionResult> DeleteBookAsync(int id, CancellationToken cancellationToken)
         {
             // cascading delete because ratings should not exist for non existing books

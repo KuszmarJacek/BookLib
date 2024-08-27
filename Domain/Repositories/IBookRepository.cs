@@ -2,7 +2,7 @@
 using BookLib.Entities;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BookLib.Data
+namespace BookLib.Domain.Repositories
 {
     public interface IBookRepository
     {
