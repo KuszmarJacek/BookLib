@@ -10,3 +10,4 @@ Currently supports CRUD for books, controller for API, swagger for API documenta
 - [ ] Add HATEOAS before extending data model
 - [ ] Add integration test
 - [x] Add authentication - user registration, login, refresh tokens
+- [ ] Refactor code structure to be more readable and organized
