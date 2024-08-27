@@ -7,6 +7,7 @@ namespace BookLib.Services
     {
         Task<IdentityResult> RegisterUser(UserForRegistrationDTO userForRegistrationDTO);
         Task<bool> ValidateUser(UserForAuthenticationDTO userForAuthenticationDTO);
-        Task<string> CreateToken();
+        Task<TokenDTO> CreateToken(bool extendRefreshToken);
+        Task<TokenDTO> RefreshToken(TokenDTO tokenDTO);
     }
 }

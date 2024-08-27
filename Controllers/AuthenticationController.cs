@@ -16,7 +16,7 @@ namespace BookLib.Controllers
             _service = service;
         }
 
-        [HttpPost]
+        [HttpPost("register")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrationDTO userForRegistrationDTO)
         {
@@ -41,7 +41,9 @@ namespace BookLib.Controllers
                 return Unauthorized();
             }
 
-            return Ok(new { Token = await _service.AuthenticationService.CreateToken() });
+            var tokenDTO = await _service.AuthenticationService.CreateToken(extendRefreshToken: true);
+
+            return Ok(tokenDTO);
         }
     }
 }

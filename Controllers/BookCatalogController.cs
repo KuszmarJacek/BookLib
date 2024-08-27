@@ -19,7 +19,6 @@ namespace BookLib.Controllers
 
         // IAsyncEnumerable ensures that each incoming book is accessible as it's getting fetched from the db. Task<IEnumerabl> would fetch all the books and then present them.
         [HttpGet]
-        [Authorize(Roles = "Manager")]
         public IAsyncEnumerable<Book> GetBooks()
         {
             return _bookService.GetBooks();
@@ -63,7 +62,7 @@ namespace BookLib.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Manager")]
         public async Task<ActionResult> DeleteBookAsync(int id, CancellationToken cancellationToken)
         {
             // cascading delete because ratings should not exist for non existing books
